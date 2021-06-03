@@ -385,73 +385,11 @@ sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler
 EOS
 chmod +x startServices.sh
 
-cat > clusterrole.yaml <<EOF
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  annotations:
-    rbac.authorization.kubernetes.io/autoupdate: "true"
-  labels:
-    kubernetes.io/bootstrapping: rbac-defaults
-  name: system:kube-apiserver-to-kubelet
-- apiGroups:
-  - ""
-  resources:
-  - nodes/proxy
-  - nodes/stats
-  - nodes/log
-  - nodes/spec
-  - nodes/metrics
-  - nodes/status
-  - nodes
-  - services
-  - pods
-  verbs:
-  - '*'
-- apiGroups:
-  - storage.k8s.io
-  resources:
-  - '*'
-  verbs:
-  - '*'
-- apiGroups:
-  - coordination.k8s.io
-  resources:
-  - leases
-  verbs:
-  - '*'
-- apiGroups:
-  - node.k8s.io
-  resources:
-  - runtimeclasses
-  verbs:
-  - '*'
-EOF
-
-## Set Workdir
-cd /home/ubuntu
-
-cat > clusterrolebinding.yaml <<EOF
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: system:kube-apiserver
-  namespace: ""
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: system:kube-apiserver-to-kubelet
-subjects:
-  - apiGroup: rbac.authorization.k8s.io
-    kind: User
-    name: Kubernetes
-EOF
-
 cat > enableKubeletAuth.sh <<EOF
 ## Set Workdir
 cd /home/ubuntu
 
-kubectl apply --kubeconfig admin.kubeconfig -f clusterrole.yaml
-kubectl apply --kubeconfig admin.kubeconfig -f clusterrolebinding.yaml
+kubectl apply --kubeconfig admin.kubeconfig create clusterrolebinding kubelet-access \\
+--clusterrole=system:node --user=Kubernetes
 EOF
-chmod u+x enableKubeletAuth.sh
+chmod +x enableKubeletAuth.sh

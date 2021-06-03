@@ -122,14 +122,14 @@ for instance in CONTROLLERS; do
         address=$(echo ${instance} | cut -d= -f2)
         scp -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ca.pem ca-key.pem ca-config.json \
                 kubernetes.pem kubernetes-key.pem encryption-config.yaml ubuntu@${address}:~/
-                        ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@${address} /home/ubuntu/generateSSL.sh
-                        ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@${address} /home/ubuntu/generateKubeconfig.sh
-                        ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@${address} /home/ubuntu/installEtcd.sh
-                        ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@${address} /home/ubuntu/startServices.sh
-                done
+        ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@${address} /home/ubuntu/generateSSL.sh
+        ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@${address} /home/ubuntu/generateKubeconfig.sh
+        ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@${address} /home/ubuntu/installEtcd.sh
+        ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@${address} /home/ubuntu/startServices.sh
+done
 
-                controller0=$(echo CONTROLLERS | cut -d' ' -f1 | cut -d= -f2)
-                ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@$controller0 /home/ubuntu/enableKubeletAuth.sh
+controller0=$(echo CONTROLLERS | cut -d' ' -f1 | cut -d= -f2)
+ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@$controller0 /home/ubuntu/enableKubeletAuth.sh
 
               ## configure api load balancer
               sudo apt-get update -y
@@ -241,7 +241,7 @@ http {
 #}
 EOF
 nginx -t
-systemctl start nginx
+systemctl restart nginx
 systemctl enable nginx
 
 ## configure workers
@@ -253,4 +253,3 @@ for instance in WORKERS; do
         ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@${address} /home/ubuntu/generateKubeconfig.sh
         ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@${address} /home/ubuntu/startServices.sh
 done
-
