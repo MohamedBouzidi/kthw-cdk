@@ -331,8 +331,9 @@ service-account-key.pem service-account.pem encryption-config.yaml /var/lib/kube
 
 ## configure apiserver
 INTERNAL_IP=LOCALIP
-API_LB=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=APILBNAME" \
---query "Reservations[0].Instances[0].PublicIpAddress")
+API_LB=$(aws ec2 describe-instances \
+--filters "Name=tag:Name,Values=APILBNAME" "Name=instance-state-name,Values=running" \
+--query "Reservations[0].Instances[0].PublicIpAddress" | sed 's/"//g')
 
 cat <<EOF | sudo tee /etc/systemd/system/kube-apiserver.service
 [Unit]
