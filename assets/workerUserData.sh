@@ -151,12 +151,12 @@ cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf
     "isGateway": true,
     "ipMasq": true,
     "ipam": {
-	"type": "host-local",
-	"ranges": [
-	  [{"subnet": "PODCIDR"}]
-	],
-	"routes": [{"dst": "0.0.0.0/0"}]
-}
+    "type": "host-local",
+    "ranges": [
+      [{"subnet": "PODCIDR"}]
+    ],
+    "routes": [{"dst": "0.0.0.0/0"}]
+  }
 }
 EOF
 

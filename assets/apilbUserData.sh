@@ -23,13 +23,13 @@ chmod 400 KEY_NAME
 
 ## Download tools
 wget -q --timestamping \
-        https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssl \
-        https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssljson
-        chmod +x cfssl cfssljson
-        sudo mv cfssl cfssljson /usr/local/bin/
-        wget https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kubectl
-        chmod +x kubectl
-        sudo mv kubectl /usr/local/bin/
+  https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssl \
+  https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssljson
+chmod +x cfssl cfssljson
+sudo mv cfssl cfssljson /usr/local/bin/
+wget https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kubectl
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
 
 ## Generate SSL
 cat > ca-config.json <<EOF
@@ -131,11 +131,11 @@ done
 controller0=$(echo CONTROLLERS | cut -d' ' -f1 | cut -d= -f2)
 ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@$controller0 /home/ubuntu/enableKubeletAuth.sh
 
-              ## configure api load balancer
-              sudo apt-get update -y
-              sudo apt-get install -y nginx
-              # in the nginx config, use kubernetes.pem instead of ca.pem
-              cat > /etc/nginx/nginx.conf <<EOF
+## configure api load balancer
+sudo apt-get update -y
+sudo apt-get install -y nginx
+# in the nginx config, use kubernetes.pem instead of ca.pem
+cat > /etc/nginx/nginx.conf <<EOF
 user www-data;
 worker_processes auto;
 pid /run/nginx.pid;
@@ -217,28 +217,6 @@ http {
         include /etc/nginx/conf.d/*.conf;
         include /etc/nginx/sites-enabled/*;
 }
-
-
-#mail {
-#       # See sample authentication script at:
-#       # http://wiki.nginx.org/ImapAuthenticateWithApachePhpScript
-#
-#       # auth_http localhost/auth.php;
-#       # pop3_capabilities "TOP" "USER";
-#       # imap_capabilities "IMAP4rev1" "UIDPLUS";
-#
-#       server {
-#               listen     localhost:110;
-#               protocol   pop3;
-#               proxy      on;
-#       }
-#
-#       server {
-#               listen     localhost:143;
-#               protocol   imap;
-#               proxy      on;
-#       }
-#}
 EOF
 nginx -t
 systemctl restart nginx

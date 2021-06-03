@@ -21,11 +21,11 @@ sudo ./aws/install
 wget -q --timestamping \
 	https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssl \
 	https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssljson
-	chmod +x cfssl cfssljson
-	sudo mv cfssl cfssljson /usr/local/bin/
-	wget https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kubectl
-	chmod +x kubectl
-	sudo mv kubectl /usr/local/bin/
+chmod +x cfssl cfssljson
+sudo mv cfssl cfssljson /usr/local/bin/
+wget https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kubectl
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
 
 ## generate ssl
 cat > admin-csr.json <<EOF
@@ -53,7 +53,7 @@ cat > kube-controller-manager-csr.json <<EOF
   "key": {
     "algo": "rsa",
     "size": 2048
-},
+  },
   "names": [
     {
       "C": "US",
@@ -61,7 +61,7 @@ cat > kube-controller-manager-csr.json <<EOF
       "O": "system:kube-controller-manager",
       "OU": "Kubernetes The Hard Way",
       "ST": "Oregon"
-}
+    }
   ]
 }
 EOF
@@ -72,7 +72,7 @@ cat > kube-scheduler-csr.json <<EOF
   "key": {
     "algo": "rsa",
     "size": 2048
-},
+  },
   "names": [
     {
       "C": "US",
@@ -80,7 +80,7 @@ cat > kube-scheduler-csr.json <<EOF
       "O": "system:kube-scheduler",
       "OU": "Kubernetes The Hard Way",
       "ST": "Oregon"
-}
+    }
   ]
 }
 EOF
@@ -91,7 +91,7 @@ cat > service-account-csr.json <<EOF
   "key": {
     "algo": "rsa",
     "size": 2048
-},
+  },
   "names": [
     {
       "C": "US",
@@ -99,7 +99,7 @@ cat > service-account-csr.json <<EOF
       "O": "Kubernetes",
       "OU": "Kubernetes The Hard Way",
       "ST": "Oregon"
-}
+    }
   ]
 }
 EOF
@@ -318,10 +318,10 @@ wget -q --timestamping \
 	"https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kube-controller-manager" \
 	"https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kube-scheduler" \
 	"https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kubectl"
-	chmod +x kube-apiserver kube-controller-manager kube-scheduler kubectl
-	sudo mv kube-apiserver kube-controller-manager kube-scheduler kubectl /usr/local/bin/
+chmod +x kube-apiserver kube-controller-manager kube-scheduler kubectl
+sudo mv kube-apiserver kube-controller-manager kube-scheduler kubectl /usr/local/bin/
 
-	cat > startServices.sh <<EOS
+cat > startServices.sh <<EOS
 ## Set Workdir
 cd /home/ubuntu
 
