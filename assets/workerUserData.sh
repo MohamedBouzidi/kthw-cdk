@@ -236,6 +236,7 @@ ExecStart=/usr/local/bin/kubelet \\
   --config=/var/lib/kubelet/kubelet-config.yaml \\
   --container-runtime=remote \\
   --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock \\
+  --hostname-override=INSTANCE \\
   --image-pull-progress-deadline=2m \\
   --kubeconfig=/var/lib/kubelet/kubeconfig \\
   --network-plugin=cni \\
