@@ -252,10 +252,10 @@ export class KthwStack extends cdk.Stack {
           vpc: vpc,
         })
       );
-      vpc.publicSubnets[0].addRoute(name, {
-        routerId: workers[0].instanceId,
-        routerType: ec2.RouterType.INSTANCE,
-        destinationCidrBlock: podcidr,
+      new ec2.CfnRoute(this, name + 'PodRoute', {
+      	routeTableId: vpc.publicSubnets[0].routeTable.routeTableId,
+	destinationCidrBlock: podcidr,
+	instanceId: workers[0].instanceId
       });
       apilb.node.addDependency(workers[0]);
     }
