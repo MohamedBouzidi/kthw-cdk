@@ -27,6 +27,9 @@ wget https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 
+## Install mod for DNS
+modprobe br_netfilter
+
 ## generate ssl
 cat > admin-csr.json <<EOF
 {
