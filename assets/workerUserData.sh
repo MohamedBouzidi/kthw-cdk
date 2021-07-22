@@ -4,6 +4,8 @@
 ## Replace PODCIDR
 ## Replace INSTANCE
 ## Replace LOCALIP
+## Replace WORKER_NAMES
+## Replace CONTROLLER_NAMES
 
 ## Set Workdir
 cd /home/ubuntu
@@ -24,6 +26,13 @@ wget -q --timestamping \
 	wget https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kubectl
 	chmod +x kubectl
 	sudo mv kubectl /usr/local/bin/
+
+## Install mod for DNS
+modprobe br_netfilter
+
+## Add node names
+echo CONTROLLER_NAMES >> /etc/hosts
+echo WORKER_NAMES >> /etc/hosts
 
 ## generate ssl
 cat > INSTANCE-csr.json <<EOF

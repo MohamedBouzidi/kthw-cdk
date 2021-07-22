@@ -7,6 +7,8 @@
 ## Replace ETCDINITIAL
 ## Replace ETCDCLUSTER
 ## Replace BUCKET_NAME
+## Replace CONTROLLER_NAMES
+## Replace WORKER_NAMES
 
 ## Set Workdir
 cd /home/ubuntu
@@ -30,6 +32,10 @@ sudo mv kubectl /usr/local/bin/
 
 ## Install mod for DNS
 modprobe br_netfilter
+
+## Add node names
+echo CONTROLLER_NAMES >> /etc/hosts
+echo WORKER_NAMES >> /etc/hosts
 
 ## generate ssl
 cat > admin-csr.json <<EOF

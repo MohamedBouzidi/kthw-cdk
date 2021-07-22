@@ -11,8 +11,8 @@ export class KthwStack extends cdk.Stack {
     const keyName = 'kthw';
     const bucketName = 'magictraining-bucket';
     const apilbName = 'api-load-balancer';
-    const numberOfWorkers = 1; // max 9
-    const numberOfControllers = 1; // max 9
+    const numberOfWorkers = process.env.WORKER_COUNT || 1; // max 9
+    const numberOfControllers = process.env.CONTROLLER_COUNT || 1; // max 9
 
     const vpc = new ec2.Vpc(this, 'Vpc', {
       maxAzs: 2,
@@ -196,6 +196,22 @@ export class KthwStack extends cdk.Stack {
         .map((_, i) => `https://10.240.0.1${i}:2379`)
         .join(',')
     );
+    controllerUserData = controllerUserData.replace(/BUCKET_NAME/g, bucketName);
+    // temporary solution for resolving node names
+    controllerUserData = controllerUserData.replace(
+      /CONTROLLER_NAMES/g,
+      new Array(numberOfControllers)
+        .fill(0)
+        .map((_, i) => `10.240.0.1${i}  controller${i}`)
+        .join('\n')
+    );
+    controllerUserData = controllerUserData.replace(
+      /WORKER_NAMES/g,
+      new Array(numberOfWorkers)
+        .fill(0)
+        .map((_, i) => `10.240.0.2${i} worker${i}`)
+        .join('\n')
+    );
 
     const controllers = [];
     for (let i = 0; i < numberOfControllers; i++) {
@@ -227,7 +243,21 @@ export class KthwStack extends cdk.Stack {
       'utf8'
     );
     workerUserData = workerUserData.replace(/APILBNAME/g, apilbName);
-
+    // temporary solution for resolving node names
+    workerUserData = workerUserData.replace(
+      /CONTROLLER_NAMES/g,
+      new Array(numberOfControllers)
+        .fill(0)
+        .map((_, i) => `10.240.0.1${i}  worker${i}`)
+        .join('\n')
+    );
+    workerUserData = workerUserData.replace(
+      /WORKER_NAMES/g,
+      new Array(numberOfWorkers)
+        .fill(0)
+        .map((_, i) => `10.240.0.2${i} worker${i}`)
+        .join('\n')
+    );
     const workers = [];
     for (let i = 0; i < numberOfWorkers; i++) {
       const name = 'worker' + i;
@@ -253,9 +283,9 @@ export class KthwStack extends cdk.Stack {
         })
       );
       new ec2.CfnRoute(this, name + 'PodRoute', {
-      	routeTableId: vpc.publicSubnets[0].routeTable.routeTableId,
-	destinationCidrBlock: podcidr,
-	instanceId: workers[0].instanceId
+        routeTableId: vpc.publicSubnets[0].routeTable.routeTableId,
+        destinationCidrBlock: podcidr,
+        instanceId: workers[0].instanceId,
       });
       apilb.node.addDependency(workers[0]);
     }
