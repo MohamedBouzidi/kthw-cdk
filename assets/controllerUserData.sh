@@ -6,6 +6,7 @@
 ## Replace INSTANCE
 ## Replace ETCDINITIAL
 ## Replace ETCDCLUSTER
+## Replace BUCKET_NAME
 
 ## Set Workdir
 cd /home/ubuntu
@@ -402,3 +403,11 @@ kubectl create clusterrolebinding --clusterrole="cluster-admin" --user="kubernet
 kubeclt create clusterrolebinding --clusterrole="cluster-admin" --user="Kubernetes"
 EOF
 chmod +x enableKubeletAuth.sh
+
+cat > installDNS.sh <<EOF
+## Set Workdir
+cd /home/ubuntu
+
+aws s3 cp s3://BUCKET_NAME/coredns.yaml coredns.yaml
+kubectl apply -f coredns.yaml
+EOF
