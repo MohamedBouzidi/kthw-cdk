@@ -202,6 +202,9 @@ kubectl config use-context default --kubeconfig=admin.kubeconfig
 
 sudo mkdir -p /var/lib/kubernetes/
 sudo mv kube-controller-manager.kubeconfig kube-scheduler.kubeconfig /var/lib/kubernetes/
+
+mkdir -p /home/ubuntu/.kube
+cp /home/ubuntu/admin.kubeconfig /home/ubuntu/.kube/config
 EOF
 chmod +x generateKubeconfig.sh
 
