@@ -95,7 +95,10 @@ export class KthwStack extends cdk.Stack {
             new iam.PolicyStatement({
               effect: iam.Effect.ALLOW,
               actions: ['s3:GetObject'],
-              resources: [`arn:aws:s3:::${bucketName}/${keyName}.pem`],
+              resources: [
+                `arn:aws:s3:::${bucketName}/${keyName}.pem`,
+                `arn:aws:s3:::${bucketName}/coredns.yaml`,
+              ],
             }),
           ],
         }),

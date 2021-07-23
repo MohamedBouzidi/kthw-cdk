@@ -231,3 +231,10 @@ for instance in WORKERS; do
         ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@${address} /home/ubuntu/generateKubeconfig.sh
         ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@${address} /home/ubuntu/startServices.sh
 done
+
+## Install cluster dns
+cd /home/ubuntu
+aws s3 cp s3://BUCKET_NAME/coredns.yaml coredns.yaml
+controller0=$(echo CONTROLLERS | cut -d' ' -f1 | cut -d= -f2)
+scp -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no coredns.yaml ubuntu@$controller0:~/
+ssh -i /home/ubuntu/KEY_NAME -o StrictHostKeyChecking=no ubuntu@$controller0 /home/ubuntu/installDNS.sh
