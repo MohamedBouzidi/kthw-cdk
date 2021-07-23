@@ -405,13 +405,14 @@ cat > enableKubeletAuth.sh <<EOF
 ## Set Workdir
 cd /home/ubuntu
 
-kubectl create clusterrolebinding --clusterrole="cluster-admin" --user="kubernetes"
-kubectl create clusterrolebinding --clusterrole="cluster-admin" --user="Kubernetes"
+kubectl --kubeconfig admin.kubeconfig create clusterrolebinding kubernetes-admin --clusterrole="cluster-admin" --user="kubernetes"
+kubectl --kubeconfig admin.kubeconfig create clusterrolebinding apiserver-admin --clusterrole="cluster-admin" --user="Kubernetes"
 EOF
 chmod +x enableKubeletAuth.sh
 
 cat > installDNS.sh <<EOF
 ## Set Workdir
-kubectl apply -f /home/ubuntu/coredns.yaml
+cd /home/ubuntu
+kubectl --kubeconfig admin.kubeconfig apply -f coredns.yaml
 EOF
 chmod +x installDNS.sh
