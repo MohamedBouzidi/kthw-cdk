@@ -31,10 +31,7 @@ chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 
 ## Configure bridged traffic
-cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
-br_netfilter
-EOF
-
+modprobe br_netfilter
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
