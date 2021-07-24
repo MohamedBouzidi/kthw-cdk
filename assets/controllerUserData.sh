@@ -42,8 +42,13 @@ EOF
 sudo sysctl --system
 
 ## Add node names
-echo CONTROLLER_NAMES >> /etc/hosts
-echo WORKER_NAMES >> /etc/hosts
+cat <<EOF >> /etc/hosts
+CONTROLLER_NAMES
+EOF
+
+cat <<EOF >> /etc/hosts
+WORKER_NAMES
+EOF
 
 ## generate ssl
 cat > admin-csr.json <<EOF
