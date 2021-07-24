@@ -141,7 +141,6 @@ export class KthwStack extends cdk.Stack {
         .map((_, i) => `server 10.240.0.1${i}:6443;`)
         .join('\n                ')
     );
-    console.log(apilbUserData);
 
     const apilb = new ec2.Instance(this, apilbName, {
       instanceName: apilbName,
