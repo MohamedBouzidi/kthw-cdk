@@ -11,8 +11,10 @@ export class KthwStack extends cdk.Stack {
     const keyName = 'kthw';
     const bucketName = 'magictraining-bucket';
     const apilbName = 'api-load-balancer';
-    const numberOfWorkers = process.env.WORKER_COUNT || 1; // max 9
-    const numberOfControllers = process.env.CONTROLLER_COUNT || 1; // max 9
+    const workerCount = parseInt(process.env.WORKER_COUNT || '');
+    const numberOfWorkers = Number.isInteger(workerCount) ? workerCount : 1;
+    const controllerCount = parseInt(process.env.CONTROLLER_COUNT || '');
+    const numberOfControllers = Number.isInteger(controllerCount) ? controllerCount : 1;
 
     const vpc = new ec2.Vpc(this, 'Vpc', {
       maxAzs: 2,
@@ -139,6 +141,7 @@ export class KthwStack extends cdk.Stack {
         .map((_, i) => `server 10.240.0.1${i}:6443;`)
         .join('\n                ')
     );
+    console.log(apilbUserData);
 
     const apilb = new ec2.Instance(this, apilbName, {
       instanceName: apilbName,
