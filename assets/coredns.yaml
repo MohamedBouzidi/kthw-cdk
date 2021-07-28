@@ -179,4 +179,3 @@ spec:
   - name: metrics
     port: 9153
     protocol: TCP
-{"mode":"full","isActive":false}
