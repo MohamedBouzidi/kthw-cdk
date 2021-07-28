@@ -8,13 +8,15 @@ export class KthwStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const keyName = 'kthw';
-    const bucketName = 'magictraining-bucket';
+    const keyName = process.env.KEY_NAME || 'kthw';
+    const bucketName = process.env.BUCKET_NAME || 'magictraining-bucket';
     const apilbName = 'api-load-balancer';
     const workerCount = parseInt(process.env.WORKER_COUNT || '');
     const numberOfWorkers = Number.isInteger(workerCount) ? workerCount : 1;
     const controllerCount = parseInt(process.env.CONTROLLER_COUNT || '');
-    const numberOfControllers = Number.isInteger(controllerCount) ? controllerCount : 1;
+    const numberOfControllers = Number.isInteger(controllerCount)
+      ? controllerCount
+      : 1;
 
     const vpc = new ec2.Vpc(this, 'Vpc', {
       maxAzs: 2,
